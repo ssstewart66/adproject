@@ -12,11 +12,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String username;
     private String password;
     private String email;
     private LocalDate created_at;
+    private int role;
+    //0 -> admin, 1 -> user;
 
     @OneToMany(mappedBy = "user")
     private List<Category> categories;
@@ -78,5 +79,14 @@ public class User {
 
     public void setBudgets(List<Budget> budgets) {
         this.budgets = budgets;
+    }
+
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }

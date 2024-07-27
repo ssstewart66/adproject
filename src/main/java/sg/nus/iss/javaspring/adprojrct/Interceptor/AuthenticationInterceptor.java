@@ -1,0 +1,32 @@
+package sg.nus.iss.javaspring.adprojrct.Interceptor;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.io.IOException;
+
+@Component
+public class AuthenticationInterceptor implements HandlerInterceptor{
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws IOException {
+        System.out.println("Intercepting: " + request.getRequestURI());
+
+        HttpSession session = request.getSession();
+
+        // Check if the user already has set attribute user
+        if (session.getAttribute("user") != null)
+            return true;
+
+        String[] splitURI = request.getRequestURI().split("/");
+        if (splitURI[splitURI.length - 1].equals("login"))
+            return true;
+
+        // If the user has not logged in, redirect her/him to login
+        response.sendRedirect("/login");
+        return false;
+    }
+}
