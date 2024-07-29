@@ -1,5 +1,6 @@
 package sg.nus.iss.javaspring.adprojrct.Models;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -7,7 +8,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +17,10 @@ public class User {
     private String email;
     private LocalDate created_at;
     private int role;
-    //0 -> admin, 1 -> user;
     private boolean rememberMe;
 
     @OneToMany(mappedBy = "user")
-/*    @JsonManagedReference*/
+    @JsonIgnoreProperties("user")
     private List<Category> categories;
 
     public Integer getId() {

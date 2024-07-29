@@ -7,6 +7,7 @@ import sg.nus.iss.javaspring.adprojrct.Models.Category;
 import sg.nus.iss.javaspring.adprojrct.Services.CategoryService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/Admin")
@@ -19,7 +20,7 @@ public class AdminController {
         return "adminDashboard";
     }
 
-    @GetMapping
+    @GetMapping("/categories")
     public ResponseEntity<List<Category>> getcategories() {
         List<Category> categories = categoryService.getAllCategories();
         if (categories.isEmpty()) {
@@ -28,9 +29,10 @@ public class AdminController {
         return ResponseEntity.ok(categories);
     }
 
-    @PostMapping
-    public Category addCategory(@RequestBody Category category) {
-        return categoryService.addCategory(category);
+    @PostMapping("/add/{userId}")
+    public ResponseEntity<Category> createCategory(@RequestBody Category category, @PathVariable Integer userId) {
+        Category newCategory = categoryService.addCategory(category, userId);
+        return ResponseEntity.ok(newCategory);
     }
 
     @PutMapping("/update/{id}")
@@ -45,10 +47,11 @@ public class AdminController {
 
     @GetMapping("/category/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Integer id) {
-        if(categoryService.getCategoryById(id).isEmpty()) {
+        Optional<Category> optionalCategory = categoryService.getCategoryById(id);
+        if (optionalCategory.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }else{
-            Category category = categoryService.getCategoryById(id).get();
+        } else {
+            Category category = optionalCategory.get();
             return ResponseEntity.ok(category);
         }
     }
