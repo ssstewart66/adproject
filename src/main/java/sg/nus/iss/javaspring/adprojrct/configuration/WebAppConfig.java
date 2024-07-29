@@ -11,10 +11,10 @@ public class WebAppConfig implements WebMvcConfigurer {
     @Autowired
     AuthenticationInterceptor authenticationInterceptor;
 
-    @Override
+/*    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/logout", "/register","/resources/**", "/static/**", "/error");
-    }
+                .excludePathPatterns("/login", "/logout", "/register","/policy","/resources/**", "/static/**", "/error");
+    }*/
 }

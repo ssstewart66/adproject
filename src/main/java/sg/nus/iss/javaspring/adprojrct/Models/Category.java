@@ -1,28 +1,30 @@
 package sg.nus.iss.javaspring.adprojrct.Models;
-
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "categories")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
-    private LocalDate created_at;
-    private LocalDate updated_at;
+    private double budget;
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    /*@JsonBackReference*/
     private User user;
+
+    private int type;
+    //0 -> system; 1 -> user defined
+    //0 -> info can not be changed
+    //1 -> everything can be changed
 
     @OneToMany(mappedBy = "category")
     private List<Transaction> transactions;
-
-    @OneToMany(mappedBy = "category")
-    private List<Budget> budgets;
 
     public Integer getId() {
         return id;
@@ -38,22 +40,6 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public LocalDate getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(LocalDate created_at) {
-        this.created_at = created_at;
-    }
-
-    public LocalDate getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setUpdated_at(LocalDate updated_at) {
-        this.updated_at = updated_at;
     }
 
     public User getUser() {
@@ -72,12 +58,20 @@ public class Category {
         this.transactions = transactions;
     }
 
-    public List<Budget> getBudgets() {
-        return budgets;
+    public int getType() {
+        return type;
     }
 
-    public void setBudgets(List<Budget> budgets) {
-        this.budgets = budgets;
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public double getBudget() {
+        return budget;
+    }
+
+    public void setBudget(double amount) {
+        this.budget = amount;
     }
 
     public Category() {}

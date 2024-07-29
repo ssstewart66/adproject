@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
-import sg.nus.iss.javaspring.adprojrct.services.UserInterface;
+import sg.nus.iss.javaspring.adprojrct.Services.UserInterface;
 
 import java.time.LocalDate;
 

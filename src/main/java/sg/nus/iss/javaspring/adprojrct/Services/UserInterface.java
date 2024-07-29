@@ -1,4 +1,4 @@
-package sg.nus.iss.javaspring.adprojrct.services;
+package sg.nus.iss.javaspring.adprojrct.Services;
 
 import sg.nus.iss.javaspring.adprojrct.Models.User;
 

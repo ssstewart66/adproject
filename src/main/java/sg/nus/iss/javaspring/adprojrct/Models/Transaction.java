@@ -1,7 +1,5 @@
 package sg.nus.iss.javaspring.adprojrct.Models;
-
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
@@ -10,15 +8,11 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private double amount;
     private String description;
     private LocalDate date;
     private LocalDate created_at;
     private LocalDate updated_at;
-
-    @ManyToOne
-    private User user;
 
     @ManyToOne
     private Category category;
@@ -69,14 +63,6 @@ public class Transaction {
 
     public void setUpdated_at(LocalDate updated_at) {
         this.updated_at = updated_at;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Category getCategory() {

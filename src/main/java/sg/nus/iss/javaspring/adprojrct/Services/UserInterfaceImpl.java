@@ -1,12 +1,12 @@
-package sg.nus.iss.javaspring.adprojrct.services;
+package sg.nus.iss.javaspring.adprojrct.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
-import sg.nus.iss.javaspring.adprojrct.repository.UserRepository;
+import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
 
 @Service
-public class UserInterfaceImpl implements UserInterface {
+public class UserInterfaceImpl implements sg.nus.iss.javaspring.adprojrct.Services.UserInterface {
     @Autowired
     private UserRepository userRepository;
 
