@@ -9,6 +9,7 @@ import sg.nus.iss.javaspring.adprojrct.Services.CategoryService;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping(value = "/Admin")
 public class AdminController {
@@ -21,7 +22,7 @@ public class AdminController {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<Category>> getcategories() {
+    public ResponseEntity<List<Category>> getCategories() {
         List<Category> categories = categoryService.getAllCategories();
         if (categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -35,14 +36,14 @@ public class AdminController {
         return ResponseEntity.ok(newCategory);
     }
 
-    @PutMapping("/update/{id}")
-    public Category updateCategory(@RequestBody Category category, @PathVariable Integer id){
-        return categoryService.updateCategory(category, id);
+    @PutMapping("/update/{catId}")
+    public Category updateCategory(@RequestBody Category category, @PathVariable Integer catId){
+        return categoryService.updateCategory(category, catId);
     }
 
-    @DeleteMapping("delete/{id}")
-    public void deleteCategory(@PathVariable Integer id) {
-        categoryService.deleteCategory(id);
+    @DeleteMapping("delete/{catId}")
+    public void deleteCategory(@PathVariable Integer catId) {
+        categoryService.deleteCategory(catId);
     }
 
     @GetMapping("/category/{id}")
