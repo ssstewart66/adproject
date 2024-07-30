@@ -31,9 +31,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category addCategory(Category category, Integer userId){
+    public Category addCategory(Category category, Integer userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
+            // 检查是否存在相同名称的类别
+            Optional<Category> existingCategory = categoryRepository.findByNameAndUserId(category.getName(), userId);
+            if (existingCategory.isPresent()) {
+                throw new IllegalArgumentException("Category with the same name already exists");
+            }
+
             category.setUser(optionalUser.get());
             return categoryRepository.save(category);
         } else {
@@ -43,17 +49,25 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category updateCategory(Category category, Integer id){
-        return categoryRepository.findById(id).map(cat ->{
+    public Category updateCategory(Category category, Integer id) {
+        return categoryRepository.findById(id).map(cat -> {
+            if (!cat.getName().equals(category.getName())) {
+                // 检查是否存在相同名称的类别
+                Optional<Category> existingCategory = categoryRepository.findByNameAndUserId(category.getName(), cat.getUser().getId());
+                if (existingCategory.isPresent()) {
+                    throw new IllegalArgumentException("Category with the same name already exists");
+                }
+            }
+
             cat.setName(category.getName());
             cat.setBudget(category.getBudget());
-            if(category.getType()==0){
+            if (category.getType() == 0) {
                 cat.setType(0);
-            }else if(category.getType()==1){
+            } else if (category.getType() == 1) {
                 cat.setType(1);
             }
             return categoryRepository.save(cat);
-        }).orElseThrow(()->new RuntimeException("Category not found"));
+        }).orElseThrow(() -> new RuntimeException("Category not found"));
     }
 
     @Override
@@ -61,4 +75,12 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(int id) {
         categoryRepository.deleteById(id);
     }
+
+    @Override
+    public List<Category> getCategoriesByUserId(int userId) {
+        return categoryRepository.findByUserId(userId);
+    }
+
+
+
 }
