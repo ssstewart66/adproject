@@ -20,6 +20,7 @@ public class Category {
     private int type;
 
     @OneToMany(mappedBy = "category")
+    @JsonIgnoreProperties("category")
     private List<Transaction> transactions;
 
     public Integer getId() {

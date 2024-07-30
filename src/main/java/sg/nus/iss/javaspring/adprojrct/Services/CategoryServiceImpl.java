@@ -58,7 +58,6 @@ public class CategoryServiceImpl implements CategoryService {
                     throw new IllegalArgumentException("Category with the same name already exists");
                 }
             }
-
             cat.setName(category.getName());
             cat.setBudget(category.getBudget());
             if (category.getType() == 0) {
@@ -81,6 +80,8 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByUserId(userId);
     }
 
-
-
+    @Override
+    public List<Category> getCategoriesNotByUserId(int userId) { // 新增的方法
+        return categoryRepository.findByUserIdNot(userId);
+    }
 }

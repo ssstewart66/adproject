@@ -1,4 +1,5 @@
 package sg.nus.iss.javaspring.adprojrct.Models;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -10,11 +11,11 @@ public class Transaction {
     private Integer id;
     private double amount;
     private String description;
-    private LocalDate date;
     private LocalDate created_at;
     private LocalDate updated_at;
 
     @ManyToOne
+    @JsonIgnoreProperties("transactions")
     private Category category;
 
     public Integer getId() {
@@ -39,14 +40,6 @@ public class Transaction {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
     public LocalDate getCreated_at() {
