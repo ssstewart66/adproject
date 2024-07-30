@@ -41,7 +41,7 @@ public class AdminController {
         return categoryService.updateCategory(category, catId);
     }
 
-    @DeleteMapping("delete/{catId}")
+    @DeleteMapping("/delete/{catId}")
     public void deleteCategory(@PathVariable Integer catId) {
         categoryService.deleteCategory(catId);
     }

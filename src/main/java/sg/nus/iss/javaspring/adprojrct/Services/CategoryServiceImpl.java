@@ -47,7 +47,11 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(id).map(cat ->{
             cat.setName(category.getName());
             cat.setBudget(category.getBudget());
-            cat.setType(category.getType());
+            if(category.getType()==0){
+                cat.setType(0);
+            }else if(category.getType()==1){
+                cat.setType(1);
+            }
             return categoryRepository.save(cat);
         }).orElseThrow(()->new RuntimeException("Category not found"));
     }
