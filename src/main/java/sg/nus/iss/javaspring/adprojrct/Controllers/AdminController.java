@@ -90,6 +90,12 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/transactions")
+    public ResponseEntity<List<Transaction>> getAllTransactions() {
+        List<Transaction> transactions = transactionService.getAllTransactions();
+        return ResponseEntity.ok(transactions);
+    }
+
     @GetMapping("/transaction_detail/{transcationId}")
     public ResponseEntity<Transaction> getTransactionById(@PathVariable Integer transcationId) {
         Optional<Transaction> transcation = transactionService.getTransactionById(transcationId);

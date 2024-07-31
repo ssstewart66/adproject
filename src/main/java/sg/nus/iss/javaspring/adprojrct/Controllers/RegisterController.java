@@ -1,17 +1,17 @@
 package sg.nus.iss.javaspring.adprojrct.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Services.UserInterface;
 
 import java.time.LocalDate;
 
-@Controller
+/*@Controller
 public class RegisterController {
     @Autowired
     private UserInterface userInterface;
@@ -33,6 +33,26 @@ public class RegisterController {
         } else {
             model.addAttribute("message", "Username already in use");
             return "register";
+        }
+    }
+}*/
+
+@RestController
+@RequestMapping("/api")
+public class RegisterController {
+    @Autowired
+    private UserInterface userInterface;
+
+    @PostMapping(value = "/register")
+    public ResponseEntity<String> register(@RequestBody User user) {
+        String username = user.getUsername();
+        if (userInterface.findUserByUsername(username) == null) {
+            user.setRole(1);
+            user.setCreated_at(LocalDate.now());
+            userInterface.saveUser(user);
+            return ResponseEntity.ok("Registration successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already in use");
         }
     }
 }

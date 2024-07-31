@@ -17,11 +17,14 @@ public class User {
     private String email;
     private LocalDate created_at;
     private int role;
-    private boolean rememberMe;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties("user")
     private List<Category> categories;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
+    private List<Transaction> transactions;
 
     public Integer getId() {
         return id;
@@ -79,11 +82,13 @@ public class User {
         this.role = role;
     }
 
-    public boolean isRememberMe() {
-        return rememberMe;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setRememberMe(boolean rememberMe) {
-        this.rememberMe = rememberMe;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
+
+    public User(){}
 }

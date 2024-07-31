@@ -18,6 +18,10 @@ public class Transaction {
     @JsonIgnoreProperties("transactions")
     private Category category;
 
+    @ManyToOne
+    @JsonIgnoreProperties("transactions")
+    private User user;
+
     public Integer getId() {
         return id;
     }
@@ -65,4 +69,14 @@ public class Transaction {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Transaction() {}
 }

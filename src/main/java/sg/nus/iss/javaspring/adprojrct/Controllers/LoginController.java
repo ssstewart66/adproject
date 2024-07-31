@@ -1,15 +1,19 @@
 package sg.nus.iss.javaspring.adprojrct.Controllers;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Services.UserInterface;
 
-@Controller
+import java.util.HashMap;
+import java.util.Map;
+
+/*@Controller
 public class LoginController {
     @Autowired
     private UserInterface userInterface;
@@ -77,4 +81,30 @@ public class LoginController {
 
         return "redirect:/login";
     }
+}*/
+@RestController
+@RequestMapping("/api")
+public class LoginController {
+    @Autowired
+    private UserInterface userInterface;
+
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody User user, HttpSession session, HttpServletResponse response) {
+        if (validateUser(user.getUsername(), user.getPassword())) {
+            User inuser = userInterface.findUserByUsername(user.getUsername());
+            session.setAttribute("user", inuser);
+
+            return ResponseEntity.ok(inuser); // 返回用户对象
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private boolean validateUser(String username, String password) {
+        User user = userInterface.authenticate(username, password);
+        return user != null;
+    }
 }
+
+
+
