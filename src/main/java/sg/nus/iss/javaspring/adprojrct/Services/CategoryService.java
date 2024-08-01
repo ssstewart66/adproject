@@ -1,16 +1,17 @@
 package sg.nus.iss.javaspring.adprojrct.Services;
 
-import sg.nus.iss.javaspring.adprojrct.DTO.CategoryDTO;
+import sg.nus.iss.javaspring.adprojrct.Models.Category;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CategoryService {
-    List<CategoryDTO> getAllCategories();
-    Optional<CategoryDTO> getCategoryById(int id);
-    CategoryDTO addCategory(CategoryDTO categoryDto, Integer userId);
-    CategoryDTO updateCategory(CategoryDTO categoryDto, Integer id);
+    List<Category> getAllCategories();
+    Optional<Category> getCategoryById(int id);
+    Category addCategory(Category category, Integer userId);
+    Category updateCategory(Category category, Integer id);
     void deleteCategory(int id);
-    List<CategoryDTO> getCategoriesNotByUserId(int userId);
-    List<CategoryDTO> getCategoriesByUserId(int userId);
+    List<Category> getCategoriesNotByUserId(int userId);
+    List<Category> getCategoriesByUserId(int userId);
+    List<Category> getCategoriesByType(int type);
 }

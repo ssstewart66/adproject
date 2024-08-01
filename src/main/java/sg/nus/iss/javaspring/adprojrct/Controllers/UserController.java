@@ -1,3 +1,4 @@
+/*
 package sg.nus.iss.javaspring.adprojrct.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,4 +103,4 @@ public class UserController {
     public void deleteTransaction(@PathVariable Integer transId) {
         transactionService.deleteTransaction(transId);
     }
-}
+}*/
