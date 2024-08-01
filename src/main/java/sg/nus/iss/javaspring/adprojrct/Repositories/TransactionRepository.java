@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
     Optional<List<Transaction>> findByCategoryId(int categoryId);
+    Optional<List<Transaction>> findByUserId(Integer userId);
 }

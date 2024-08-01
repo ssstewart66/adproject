@@ -81,7 +81,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getCategoriesNotByUserId(int userId) { // 新增的方法
+    public List<Category> getCategoriesNotByUserId(int userId) {
         return categoryRepository.findByUserIdNot(userId);
+    }
+
+    @Override
+    public List<Category> getCategoriesByType(int type){
+        return categoryRepository.findByType(type);
     }
 }

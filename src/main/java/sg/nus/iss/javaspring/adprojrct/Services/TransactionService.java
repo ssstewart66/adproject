@@ -10,4 +10,5 @@ public interface TransactionService {
     List<Transaction> getAllTransactions();
     Optional<List<Transaction>> getTransactionsByCategoryId(int categoryId);
     Optional<Transaction> getTransactionById(int transactionId);
+    Optional<List<Transaction>> getTransactionsByUserId(int userId);
 }

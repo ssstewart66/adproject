@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -23,5 +25,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User authenticate(String username, String password) {
         return userRepository.findByUsernameAndPassword(username, password);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public void deleteUserById(int userId) {
+        userRepository.deleteById(userId);
     }
 }

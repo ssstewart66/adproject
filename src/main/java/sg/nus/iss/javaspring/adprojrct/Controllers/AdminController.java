@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sg.nus.iss.javaspring.adprojrct.Models.Category;
 import sg.nus.iss.javaspring.adprojrct.Models.Transaction;
+import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Services.CategoryService;
 import sg.nus.iss.javaspring.adprojrct.Services.TransactionService;
+import sg.nus.iss.javaspring.adprojrct.Services.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +21,8 @@ public class AdminController {
     private CategoryService categoryService;
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value = "/dashboard")
     public String dashboard() {
@@ -34,18 +38,9 @@ public class AdminController {
         return ResponseEntity.ok(categories);
     }
 
-    @GetMapping("/categories/{userId}")
-    public ResponseEntity<List<Category>> getCategoriesCreatedByAdmin(@PathVariable Integer userId) {
-        List<Category> categories = categoryService.getCategoriesByUserId(userId);
-        if (categories.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return ResponseEntity.ok(categories);
-    }
-
-    @GetMapping("/categories/user")
-    public ResponseEntity<List<Category>> getCategoriesCreatedByUser() {
-        List<Category> categories = categoryService.getCategoriesNotByUserId(1);
+    @GetMapping("/categories/{type}")
+    public ResponseEntity<List<Category>> getCategoriesByType(@PathVariable int type) {
+        List<Category> categories = categoryService.getCategoriesByType(type);
         if (categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -95,6 +90,17 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/transaction_user/{userId}")
+    public ResponseEntity<List<Transaction>> getTransactionBycuserId(@PathVariable Integer userId) {
+        Optional<List<Transaction>> Transactions = transactionService.getTransactionsByUserId(userId);
+        if (Transactions.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }else{
+            List<Transaction> transactions = Transactions.get();
+            return ResponseEntity.ok(transactions);
+        }
+    }
+
     @GetMapping("/transactions")
     public ResponseEntity<List<Transaction>> getAllTransactions() {
         List<Transaction> transactions = transactionService.getAllTransactions();
@@ -109,6 +115,20 @@ public class AdminController {
         }else{
             return ResponseEntity.ok(transcation.get());
         }
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.findAllUsers();
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(users);
+    }
+
+    @DeleteMapping("/deleteuser/{userId}")
+    public void deleteUser(@PathVariable Integer userId) {
+        userService.deleteUserById(userId);
     }
 }
 

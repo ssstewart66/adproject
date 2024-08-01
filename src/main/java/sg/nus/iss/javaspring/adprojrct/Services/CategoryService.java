@@ -13,4 +13,5 @@ public interface CategoryService {
     void deleteCategory(int id);
     List<Category> getCategoriesNotByUserId(int userId);
     List<Category> getCategoriesByUserId(int userId);
+    List<Category> getCategoriesByType(int type);
 }
