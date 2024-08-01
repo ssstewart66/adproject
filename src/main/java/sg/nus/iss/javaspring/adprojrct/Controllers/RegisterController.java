@@ -3,11 +3,9 @@ package sg.nus.iss.javaspring.adprojrct.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
-import sg.nus.iss.javaspring.adprojrct.Services.UserInterface;
+import sg.nus.iss.javaspring.adprojrct.Services.UserService;
 
 import java.time.LocalDate;
 
@@ -41,15 +39,15 @@ public class RegisterController {
 @RequestMapping("/api")
 public class RegisterController {
     @Autowired
-    private UserInterface userInterface;
+    private UserService userService;
 
     @PostMapping(value = "/register")
     public ResponseEntity<String> register(@RequestBody User user) {
         String username = user.getUsername();
-        if (userInterface.findUserByUsername(username) == null) {
+        if (userService.findUserByUsername(username) == null) {
             user.setRole(1);
             user.setCreated_at(LocalDate.now());
-            userInterface.saveUser(user);
+            userService.saveUser(user);
             return ResponseEntity.ok("Registration successful");
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already in use");

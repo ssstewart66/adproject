@@ -6,7 +6,7 @@ import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
 
 @Service
-public class UserInterfaceImpl implements sg.nus.iss.javaspring.adprojrct.Services.UserInterface {
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 

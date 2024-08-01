@@ -5,28 +5,28 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import sg.nus.iss.javaspring.adprojrct.Models.User;
 
 import java.io.IOException;
 
 @Component
-public class AuthenticationInterceptor implements HandlerInterceptor{
+public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws IOException {
-        System.out.println("Intercepting: " + request.getRequestURI());
-
         HttpSession session = request.getSession();
-
-        // Check if the user already has set attribute user
-        if (session.getAttribute("user") != null)
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
             return true;
+        }
 
-        String[] splitURI = request.getRequestURI().split("/");
-        if (splitURI[splitURI.length - 1].equals("login"))
+        String requestURI = request.getRequestURI();
+        if (requestURI.equals("/api/login") || requestURI.equals("/api/register") || requestURI.equals("/policy")) {
             return true;
+        }
 
-        // If the user has not logged in, redirect her/him to login
-        response.sendRedirect("/login");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         return false;
     }
 }
+

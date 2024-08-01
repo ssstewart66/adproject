@@ -10,8 +10,8 @@ import sg.nus.iss.javaspring.adprojrct.Interceptor.AuthenticationInterceptor;
 public class WebAppConfig implements WebMvcConfigurer {
     @Autowired
     AuthenticationInterceptor authenticationInterceptor;
-
-/*    @Override
+/*
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor)
                 .addPathPatterns("/**")

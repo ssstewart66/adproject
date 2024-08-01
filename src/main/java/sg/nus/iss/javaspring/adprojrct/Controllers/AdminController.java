@@ -59,8 +59,13 @@ public class AdminController {
     }
 
     @PutMapping("/update/{catId}")
-    public Category updateCategory(@RequestBody Category category, @PathVariable Integer catId){
-        return categoryService.updateCategory(category, catId);
+    public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable Integer catId) {
+        Optional<Category> optionalCategory = categoryService.getCategoryById(catId);
+        if (optionalCategory.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Category updatedCategory = categoryService.updateCategory(category, catId);
+        return ResponseEntity.ok(updatedCategory);
     }
 
     @DeleteMapping("/delete/{catId}")

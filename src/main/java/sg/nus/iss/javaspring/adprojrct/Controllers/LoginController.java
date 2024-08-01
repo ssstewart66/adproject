@@ -8,15 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
-import sg.nus.iss.javaspring.adprojrct.Services.UserInterface;
-
-import java.util.HashMap;
-import java.util.Map;
+import sg.nus.iss.javaspring.adprojrct.Services.UserService;
 
 /*@Controller
 public class LoginController {
     @Autowired
-    private UserInterface userInterface;
+    private UserService userInterface;
 
     @GetMapping(value = "/login")
     public String login(Model model, @CookieValue(value = "username", defaultValue = "") String username, @CookieValue(value = "password", defaultValue = "") String password) {
@@ -33,21 +30,6 @@ public class LoginController {
             User inuser = userInterface.findUserByUsername(user.getUsername());
             session.setAttribute("user", inuser);
 
-            if (user.isRememberMe()) {
-                Cookie usernameCookie = new Cookie("username", user.getUsername());
-                Cookie passwordCookie = new Cookie("password", user.getPassword());
-                usernameCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
-                passwordCookie.setMaxAge(7 * 24 * 60 * 60); // 7 days
-                response.addCookie(usernameCookie);
-                response.addCookie(passwordCookie);
-            } else {
-                Cookie usernameCookie = new Cookie("username", null);
-                Cookie passwordCookie = new Cookie("password", null);
-                usernameCookie.setMaxAge(0);
-                passwordCookie.setMaxAge(0);
-                response.addCookie(usernameCookie);
-                response.addCookie(passwordCookie);
-            }
             if(inuser.getRole()==0){
                 return "redirect:/Admin/dashboard";
             }else if(inuser.getRole()==1){
@@ -71,13 +53,6 @@ public class LoginController {
     public String logout(HttpSession session, HttpServletResponse response) {
         session.invalidate();
 
-        // Remove the cookies
-        Cookie usernameCookie = new Cookie("username", null);
-        Cookie passwordCookie = new Cookie("password", null);
-        usernameCookie.setMaxAge(0);
-        passwordCookie.setMaxAge(0);
-        response.addCookie(usernameCookie);
-        response.addCookie(passwordCookie);
 
         return "redirect:/login";
     }
@@ -86,12 +61,12 @@ public class LoginController {
 @RequestMapping("/api")
 public class LoginController {
     @Autowired
-    private UserInterface userInterface;
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user, HttpSession session, HttpServletResponse response) {
         if (validateUser(user.getUsername(), user.getPassword())) {
-            User inuser = userInterface.findUserByUsername(user.getUsername());
+            User inuser = userService.findUserByUsername(user.getUsername());
             session.setAttribute("user", inuser);
 
             return ResponseEntity.ok(inuser); // 返回用户对象
@@ -101,7 +76,7 @@ public class LoginController {
     }
 
     private boolean validateUser(String username, String password) {
-        User user = userInterface.authenticate(username, password);
+        User user = userService.authenticate(username, password);
         return user != null;
     }
 }
