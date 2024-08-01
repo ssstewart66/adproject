@@ -3,6 +3,7 @@ package sg.nus.iss.javaspring.adprojrct.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sg.nus.iss.javaspring.adprojrct.DTO.CategoryDTO;
 import sg.nus.iss.javaspring.adprojrct.Models.Category;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Repositories.CategoryRepository;
@@ -10,6 +11,7 @@ import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,28 +22,36 @@ public class CategoryServiceImpl implements CategoryService {
     private UserRepository userRepository;
 
     @Override
-    public Optional<Category> getCategoryById(int id) {
-        return categoryRepository.findById(id);
+    public Optional<CategoryDTO> getCategoryById(int id) {
+        return categoryRepository.findById(id).map(this::convertToDto);
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> getAllCategories() {
+        return categoryRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public Category addCategory(Category category, Integer userId) {
+    public CategoryDTO addCategory(CategoryDTO categoryDto, Integer userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             // 检查是否存在相同名称的类别
-            Optional<Category> existingCategory = categoryRepository.findByNameAndUserId(category.getName(), userId);
+            Optional<Category> existingCategory = categoryRepository.findByNameAndUserId(categoryDto.getName(), userId);
             if (existingCategory.isPresent()) {
                 throw new IllegalArgumentException("Category with the same name already exists");
             }
 
+            Category category = new Category();
+            category.setName(categoryDto.getName());
+            category.setBudget(categoryDto.getBudget());
+            category.setType(categoryDto.getType());
             category.setUser(optionalUser.get());
-            return categoryRepository.save(category);
+
+            Category savedCategory = categoryRepository.save(category);
+            return convertToDto(savedCategory);
         } else {
             throw new RuntimeException("User not found");
         }
@@ -49,23 +59,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category updateCategory(Category category, Integer id) {
+    public CategoryDTO updateCategory(CategoryDTO categoryDto, Integer id) {
         return categoryRepository.findById(id).map(cat -> {
-            if (!cat.getName().equals(category.getName())) {
+            if (!cat.getName().equals(categoryDto.getName())) {
                 // 检查是否存在相同名称的类别
-                Optional<Category> existingCategory = categoryRepository.findByNameAndUserId(category.getName(), cat.getUser().getId());
+                Optional<Category> existingCategory = categoryRepository.findByNameAndUserId(categoryDto.getName(), cat.getUser().getId());
                 if (existingCategory.isPresent()) {
                     throw new IllegalArgumentException("Category with the same name already exists");
                 }
             }
-            cat.setName(category.getName());
-            cat.setBudget(category.getBudget());
-            if (category.getType() == 0) {
-                cat.setType(0);
-            } else if (category.getType() == 1) {
-                cat.setType(1);
-            }
-            return categoryRepository.save(cat);
+            cat.setName(categoryDto.getName());
+            cat.setBudget(categoryDto.getBudget());
+            cat.setType(categoryDto.getType());
+            Category updatedCategory = categoryRepository.save(cat);
+            return convertToDto(updatedCategory);
         }).orElseThrow(() -> new RuntimeException("Category not found"));
     }
 
@@ -76,17 +83,26 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getCategoriesByUserId(int userId) {
-        return categoryRepository.findByUserId(userId);
+    public List<CategoryDTO> getCategoriesByUserId(int userId) {
+        return categoryRepository.findByUserId(userId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Category> getCategoriesNotByUserId(int userId) {
-        return categoryRepository.findByUserIdNot(userId);
+    public List<CategoryDTO> getCategoriesNotByUserId(int userId) {
+        return categoryRepository.findByUserIdNot(userId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Category> getCategoriesByType(int type){
-        return categoryRepository.findByType(type);
+    private CategoryDTO convertToDto(Category category) {
+        CategoryDTO dto = new CategoryDTO();
+        dto.setId(category.getId());
+        dto.setName(category.getName());
+        dto.setBudget(category.getBudget());
+        dto.setType(category.getType());
+        dto.setUserId(category.getUser().getId());
+        return dto;
     }
 }
