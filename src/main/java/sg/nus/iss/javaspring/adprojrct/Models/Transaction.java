@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /*
 @Entity
@@ -93,7 +94,7 @@ public class Transaction {
     private double amount;
     private String description;
     private LocalDate created_at;
-    private LocalDate updated_at;
+    private LocalDateTime updated_at;
 
     @ManyToOne
     private Category category;
@@ -135,11 +136,11 @@ public class Transaction {
         this.created_at = created_at;
     }
 
-    public LocalDate getUpdated_at() {
+    public LocalDateTime getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(LocalDate updated_at) {
+    public void setUpdated_at(LocalDateTime updated_at) {
         this.updated_at = updated_at;
     }
 

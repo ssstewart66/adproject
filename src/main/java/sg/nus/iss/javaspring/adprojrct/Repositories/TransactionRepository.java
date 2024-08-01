@@ -13,4 +13,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     Optional<List<Transaction>> findByUserId(int userId);
 
+    @Query("SELECT l FROM Transaction l WHERE l.user.id = :userId ORDER BY l.created_at DESC")
+    List<Transaction> findTransactionsByOrderDateAtDesc(@Param("userId") int userId);
+
 }

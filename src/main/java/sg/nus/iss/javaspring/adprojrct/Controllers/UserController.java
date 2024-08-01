@@ -73,7 +73,7 @@ public class UserController {
 
     @GetMapping("/transaction/{userId}")
     public ResponseEntity<List<Transaction>> getTransactionsById(@PathVariable Integer userId) {
-        return ResponseEntity.ok(transactionService.getTransactionsByUserId(userId).get());
+        return ResponseEntity.ok(transactionService.findTransactionsByOrderDateAtDesc(userId));
     }
 
     @PostMapping("/transaction/add/{userId}")

@@ -12,6 +12,7 @@ import sg.nus.iss.javaspring.adprojrct.Repositories.TransactionRepository;
 import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,12 @@ public class TransactionServiceImpl implements TransactionService{
         return transactionRepository.findByUserId(userId);
     }
 
+
+    @Override
+    public List<Transaction> findTransactionsByOrderDateAtDesc(int userId) {
+        return transactionRepository.findTransactionsByOrderDateAtDesc(userId);
+    }
+
     @Override
     @Transactional
     public Transaction addTransaction(Transaction transaction, int userId) {
@@ -54,7 +61,7 @@ public class TransactionServiceImpl implements TransactionService{
         if (optionalUser.isPresent() && optionalCategory.isPresent()) {
             transaction.setUser(optionalUser.get());
             transaction.setCategory(optionalCategory.get());
-            transaction.setUpdated_at(LocalDate.now());
+            transaction.setUpdated_at(LocalDateTime.now());
 
             return transactionRepository.save(transaction);
         } else {
@@ -69,7 +76,7 @@ public class TransactionServiceImpl implements TransactionService{
             existingTransaction.setAmount(transaction.getAmount());
             existingTransaction.setDescription(transaction.getDescription());
             existingTransaction.setCreated_at(transaction.getCreated_at());
-            existingTransaction.setUpdated_at(LocalDate.now());
+            existingTransaction.setUpdated_at(LocalDateTime.now());
             return transactionRepository.save(existingTransaction);
         }).orElseThrow(() -> new EntityNotFoundException("Transaction not found with ID: " + transactionId));
     }
@@ -83,6 +90,8 @@ public class TransactionServiceImpl implements TransactionService{
             throw new EntityNotFoundException("Transaction not found with ID: " + transactionId);
         }
     }
+
+
 
 
 }

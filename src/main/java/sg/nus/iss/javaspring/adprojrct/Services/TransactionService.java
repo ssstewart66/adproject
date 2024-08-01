@@ -15,4 +15,5 @@ public interface TransactionService {
     Transaction addTransaction(Transaction transaction, int userId);
     Transaction updateTransaction(Transaction transaction, int transactionId);
     void deleteTransaction(int transactionId);
+    List<Transaction> findTransactionsByOrderDateAtDesc(int userId);
 }
