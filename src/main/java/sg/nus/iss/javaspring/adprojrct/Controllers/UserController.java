@@ -1,4 +1,3 @@
-/*
 package sg.nus.iss.javaspring.adprojrct.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sg.nus.iss.javaspring.adprojrct.DTO.CategoryDTO;
-import sg.nus.iss.javaspring.adprojrct.DTO.TransactionDTO;
+import sg.nus.iss.javaspring.adprojrct.Models.Category;
+import sg.nus.iss.javaspring.adprojrct.Models.Transaction;
 import sg.nus.iss.javaspring.adprojrct.Services.CategoryService;
 import sg.nus.iss.javaspring.adprojrct.Services.TransactionService;
 
@@ -30,15 +29,15 @@ public class UserController {
     }
 
     @GetMapping(value = "/budget/{userId}")
-    public ResponseEntity<List<CategoryDTO>> getBudgetsById(@PathVariable Integer userId) {
+    public ResponseEntity<List<Category>> getBudgetsById(@PathVariable Integer userId) {
         return ResponseEntity.ok(categoryService.getCategoriesByUserId(userId));
     }
 
     @PostMapping("/budget/add/{userId}")
-    public ResponseEntity<?> createCategory(@RequestBody CategoryDTO categoryDto, @PathVariable Integer userId) {
+    public ResponseEntity<?> createCategory(@RequestBody Category category, @PathVariable Integer userId) {
         try {
-            categoryDto.setType(1);
-            CategoryDTO newCategory = categoryService.addCategory(categoryDto, userId);
+            category.setType(1);
+            Category newCategory = categoryService.addCategory(category, userId);
             return ResponseEntity.ok(newCategory);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -46,9 +45,9 @@ public class UserController {
     }
 
     @PutMapping("/budget/update/{catId}")
-    public ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDto, @PathVariable Integer catId) {
+    public ResponseEntity<?> updateCategory(@RequestBody Category category, @PathVariable Integer catId) {
         try {
-            CategoryDTO updatedCategory = categoryService.updateCategory(categoryDto, catId);
+            Category updatedCategory = categoryService.updateCategory(category, catId);
             return ResponseEntity.ok(updatedCategory);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -63,8 +62,8 @@ public class UserController {
     }
 
     @GetMapping("/category/{id}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Integer id) {
-        Optional<CategoryDTO> optionalCategory = categoryService.getCategoryById(id);
+    public ResponseEntity<Category> getCategoryById(@PathVariable Integer id) {
+        Optional<Category> optionalCategory = categoryService.getCategoryById(id);
         if (optionalCategory.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -73,14 +72,14 @@ public class UserController {
     }
 
     @GetMapping("/transaction/{userId}")
-    public ResponseEntity<List<TransactionDTO>> getTransactionsById(@PathVariable Integer userId) {
-        return ResponseEntity.ok(transactionService.findTransactionsByUserId(userId));
+    public ResponseEntity<List<Transaction>> getTransactionsById(@PathVariable Integer userId) {
+        return ResponseEntity.ok(transactionService.getTransactionsByUserId(userId).get());
     }
 
     @PostMapping("/transaction/add/{userId}")
-    public ResponseEntity<?> addTransaction(@RequestBody TransactionDTO transactionDto, @PathVariable Integer userId) {
+    public ResponseEntity<?> addTransaction(@RequestBody Transaction transaction, @PathVariable Integer userId) {
         try {
-            TransactionDTO newTransaction = transactionService.addTransaction(transactionDto, userId);
+            Transaction newTransaction = transactionService.addTransaction(transaction, userId);
             return ResponseEntity.ok(newTransaction);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -88,9 +87,9 @@ public class UserController {
     }
 
     @PutMapping("/transaction/update/{transId}")
-    public ResponseEntity<?> updateTransaction(@RequestBody TransactionDTO transactionDto, @PathVariable Integer transId) {
+    public ResponseEntity<?> updateTransaction(@RequestBody Transaction transaction, @PathVariable Integer transId) {
         try {
-            TransactionDTO updatedTransaction = transactionService.updateTransaction(transactionDto, transId);
+            Transaction updatedTransaction = transactionService.updateTransaction(transaction, transId);
             return ResponseEntity.ok(updatedTransaction);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -103,4 +102,4 @@ public class UserController {
     public void deleteTransaction(@PathVariable Integer transId) {
         transactionService.deleteTransaction(transId);
     }
-}*/
+}
