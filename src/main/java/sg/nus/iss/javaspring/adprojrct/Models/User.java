@@ -19,11 +19,9 @@ public class User {
     private int role;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
     private List<Category> categories;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
     private List<Transaction> transactions;
 
     public Integer getId() {

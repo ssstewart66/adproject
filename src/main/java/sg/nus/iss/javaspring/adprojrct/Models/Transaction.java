@@ -15,11 +15,9 @@ public class Transaction {
     private LocalDate updated_at;
 
     @ManyToOne
-    @JsonIgnoreProperties("transactions")
     private Category category;
 
     @ManyToOne
-    @JsonIgnoreProperties("transactions")
     private User user;
 
     public Integer getId() {

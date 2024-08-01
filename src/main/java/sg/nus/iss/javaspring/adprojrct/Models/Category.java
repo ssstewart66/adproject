@@ -14,13 +14,11 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties("categories")
     private User user;
 
     private int type;
 
     @OneToMany(mappedBy = "category")
-    @JsonIgnoreProperties("category")
     private List<Transaction> transactions;
 
     public Integer getId() {
