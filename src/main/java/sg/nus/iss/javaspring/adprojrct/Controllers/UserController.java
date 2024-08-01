@@ -23,12 +23,12 @@ public class UserController {
         return "userDashboard";
     }
 
-    @GetMapping(value = "/budgets")
-    public ResponseEntity<List<Category>> getBudgets(@PathVariable Integer userId) {
+    @GetMapping(value = "/budget/{userId}")
+    public ResponseEntity<List<Category>> getBudgetsById(@PathVariable Integer userId) {
         return ResponseEntity.ok(categoryService.getCategoriesByUserId(userId));
     }
 
-    @PostMapping("/add/{userId}")
+    @PostMapping("/budget/add/{userId}")
     public ResponseEntity<?> createCategory(@RequestBody Category category, @PathVariable Integer userId) {
         try {
             category.setType(1);
@@ -39,7 +39,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{catId}")
+    @PutMapping("/budget/update/{catId}")
     public ResponseEntity<?> updateCategory(@RequestBody Category category, @PathVariable Integer catId) {
         try {
             Category updatedCategory = categoryService.updateCategory(category, catId);
@@ -51,7 +51,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("delete/{catId}")
+    @DeleteMapping("/budget/delete/{catId}")
     public void deleteCategory(@PathVariable Integer catId) {
         categoryService.deleteCategory(catId);
     }
