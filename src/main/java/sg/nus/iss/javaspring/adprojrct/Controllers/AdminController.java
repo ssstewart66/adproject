@@ -126,6 +126,25 @@ public class AdminController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("user/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable Integer userId) {
+        Optional<User> inuser = userService.findUserById(userId);
+        if (inuser.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(inuser.get());
+    }
+
+    @PutMapping("/updateUser/{userId}")
+    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable Integer userId) {
+        Optional<User> optionalUser = userService.findUserById(userId);
+        if (optionalUser.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User updatedUser = userService.updateUser(user, userId);
+        return ResponseEntity.ok(updatedUser);
+    }
+
     @DeleteMapping("/deleteuser/{userId}")
     public void deleteUser(@PathVariable Integer userId) {
         userService.deleteUserById(userId);

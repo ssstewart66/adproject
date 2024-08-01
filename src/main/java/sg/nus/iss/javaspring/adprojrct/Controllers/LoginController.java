@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Services.UserService;
 
+import java.util.Optional;
+
 /*@Controller
 public class LoginController {
     @Autowired
@@ -66,10 +68,10 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user, HttpSession session, HttpServletResponse response) {
         if (validateUser(user.getUsername(), user.getPassword())) {
-            User inuser = userService.findUserByUsername(user.getUsername());
+            Optional<User> inuser = userService.findUserByUsername(user.getUsername());
             session.setAttribute("user", inuser);
 
-            return ResponseEntity.ok(inuser); // 返回用户对象
+            return ResponseEntity.ok(inuser.get()); // 返回用户对象
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
