@@ -51,14 +51,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Category updateCategory(Category category, Integer id) {
         return categoryRepository.findById(id).map(cat -> {
-            if (!cat.getName().equals(category.getName())) {
-                // 检查是否存在相同名称的类别
-                Optional<Category> existingCategory = categoryRepository.findByNameAndUserId(category.getName(), cat.getUser().getId());
-                if (existingCategory.isPresent()) {
-                    throw new IllegalArgumentException("Category with the same name already exists");
-                }
-            }
-            cat.setName(category.getName());
+//            if (!cat.getName().equals(category.getName())) {
+//                // 检查是否存在相同名称的类别
+//                Optional<Category> existingCategory = categoryRepository.findByNameAndUserId(category.getName(), cat.getUser().getId());
+//                if (existingCategory.isPresent()) {
+//                    throw new IllegalArgumentException("Category with the same name already exists");
+//                }
+//            }
             cat.setBudget(category.getBudget());
             if (category.getType() == 0) {
                 cat.setType(0);
