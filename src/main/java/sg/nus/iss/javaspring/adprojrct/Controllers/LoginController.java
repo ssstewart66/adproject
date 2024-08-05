@@ -1,65 +1,17 @@
 package sg.nus.iss.javaspring.adprojrct.Controllers;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Services.UserService;
 
 import java.util.Optional;
 
-/*@Controller
-public class LoginController {
-    @Autowired
-    private UserService userInterface;
-
-    @GetMapping(value = "/login")
-    public String login(Model model, @CookieValue(value = "username", defaultValue = "") String username, @CookieValue(value = "password", defaultValue = "") String password) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        model.addAttribute("user", new User());
-        return "login";
-    }
-
-    @PostMapping(value = "/login")
-    public String Post(@ModelAttribute("user") User user, HttpSession session, HttpServletResponse response, Model model) {
-        if(validateUser(user.getUsername(),user.getPassword())){
-            User inuser = userInterface.findUserByUsername(user.getUsername());
-            session.setAttribute("user", inuser);
-
-            if(inuser.getRole()==0){
-                return "redirect:/Admin/dashboard";
-            }else if(inuser.getRole()==1){
-                return "redirect:/User/dashboard";
-            }else {
-                model.addAttribute("error", "Unauthorized access");
-                return "login";
-            }
-        }else{
-            model.addAttribute("error", "Invalid username or password");
-            return "login";
-        }
-    }
-
-    private boolean validateUser(String username, String password) {
-        User user = userInterface.authenticate(username, password);
-        return user != null;
-    }
-
-    @RequestMapping(value = "/logout")
-    public String logout(HttpSession session, HttpServletResponse response) {
-        session.invalidate();
-
-
-        return "redirect:/login";
-    }
-}*/
 @RestController
 @RequestMapping("/api")
 public class LoginController {
@@ -72,7 +24,6 @@ public class LoginController {
             Optional<User> inuser = userService.findUserByUsername(user.getUsername());
             session.setAttribute("user", inuser);
 
-            // 设置登录成功的 Cookie
             Cookie cookie = new Cookie("user_session", session.getId());
             cookie.setHttpOnly(true);
             cookie.setPath("/");
@@ -82,6 +33,21 @@ public class LoginController {
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+        session.invalidate();
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals("user_session")) {
+                cookie.setValue(null);
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+                break;
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private boolean validateUser(String username, String password) {

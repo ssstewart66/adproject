@@ -29,6 +29,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.sendRedirect("/login");
         return false;
     }

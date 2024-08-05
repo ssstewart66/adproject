@@ -64,11 +64,6 @@ public class AdminController {
         return ResponseEntity.ok(updatedCategory);
     }
 
-/*    @DeleteMapping("/delete/{catId}")
-    public void deleteCategory(@PathVariable Integer catId) {
-        categoryService.deleteCategory(catId);
-    }*/
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Integer id, HttpSession session) {
         // 验证会话是否存在
