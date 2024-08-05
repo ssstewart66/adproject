@@ -1,4 +1,5 @@
 package sg.nus.iss.javaspring.adprojrct.Controllers;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +72,13 @@ public class LoginController {
             Optional<User> inuser = userService.findUserByUsername(user.getUsername());
             session.setAttribute("user", inuser);
 
-            return ResponseEntity.ok(inuser.get()); // 返回用户对象
+            // 设置登录成功的 Cookie
+            Cookie cookie = new Cookie("user_session", session.getId());
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+
+            return ResponseEntity.ok(inuser.get());
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -82,6 +89,7 @@ public class LoginController {
         return user != null;
     }
 }
+
 
 
 

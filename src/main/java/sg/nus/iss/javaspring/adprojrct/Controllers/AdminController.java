@@ -1,4 +1,5 @@
 package sg.nus.iss.javaspring.adprojrct.Controllers;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class AdminController {
         return ResponseEntity.ok(categories);
     }
 
-    @GetMapping("/categories/{type}")
+    @GetMapping("/categories/{type}")  //0 -> System  1 -> User
     public ResponseEntity<List<Category>> getCategoriesByType(@PathVariable int type) {
         List<Category> categories = categoryService.getCategoriesByType(type);
         if (categories.isEmpty()) {
@@ -63,9 +64,21 @@ public class AdminController {
         return ResponseEntity.ok(updatedCategory);
     }
 
-    @DeleteMapping("/delete/{catId}")
+/*    @DeleteMapping("/delete/{catId}")
     public void deleteCategory(@PathVariable Integer catId) {
         categoryService.deleteCategory(catId);
+    }*/
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Integer id, HttpSession session) {
+        // 验证会话是否存在
+        if (session.getAttribute("user") == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        categoryService.deleteCategory(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/category/{id}")
