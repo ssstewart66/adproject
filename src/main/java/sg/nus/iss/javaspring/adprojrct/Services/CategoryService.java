@@ -13,4 +13,6 @@ public interface CategoryService {
     void deleteCategory(int id);
     List<Category> getCategoriesByUserId(int userId);
     List<Category> getCategoriesByType(int type);
+
+    double getTotalBudgetByUserId(int userId);
 }

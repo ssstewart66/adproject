@@ -102,4 +102,44 @@ public class UserController {
     public void deleteTransaction(@PathVariable Integer transId) {
         transactionService.deleteTransaction(transId);
     }
+
+
+   // DASHBOARD API   ( つ•̀ω•́)つ
+
+    @GetMapping("/total-spending-today/{userId}")
+    public ResponseEntity<Double> getTotalSpendingToday(@PathVariable int userId) {
+        double totalSpending = transactionService.getTotalSpendingToday(userId);
+        return ResponseEntity.ok(totalSpending);
+    }
+
+    @GetMapping("/total-spending-last-week/{userId}")
+    public ResponseEntity<Double> getTotalSpendingLastWeek(@PathVariable int userId) {
+        double totalSpending = transactionService.getTotalSpendingLastWeek(userId);
+        return ResponseEntity.ok(totalSpending);
+    }
+
+    @GetMapping("/total-spending-last-month/{userId}")
+    public ResponseEntity<Double> getTotalSpendingLastMonth(@PathVariable int userId) {
+        double totalSpending = transactionService.getTotalSpendingLastMonth(userId);
+        return ResponseEntity.ok(totalSpending);
+    }
+
+    @GetMapping("/total-spending-previous-month/{userId}")
+    public ResponseEntity<Double> getTotalSpendingPreviousMonth(@PathVariable int userId) {
+        double totalSpending = transactionService.getTotalSpendingPreviousMonth(userId);
+        return ResponseEntity.ok(totalSpending);
+    }
+
+    @GetMapping("/total-spending-last-year/{userId}")
+    public ResponseEntity<Double> getTotalSpendingLastYear(@PathVariable int userId) {
+        double totalSpending = transactionService.getTotalSpendingLastYear(userId);
+        return ResponseEntity.ok(totalSpending);
+    }
+
+    //当前用户总预算  ʕ•̀ω•́ʔ✧
+    @GetMapping("/categories/total-budget/{userId}")
+    public ResponseEntity<Double> getTotalBudgetByUserId(@PathVariable int userId) {
+        double totalBudget = categoryService.getTotalBudgetByUserId(userId);
+        return ResponseEntity.ok(totalBudget);
+    }
 }

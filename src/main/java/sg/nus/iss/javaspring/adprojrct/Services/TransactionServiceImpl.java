@@ -92,6 +92,42 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
 
+    @Override
+    public double getTotalSpendingLastMonth(int userId) {
+        return getTotalSpending(userId, LocalDate.now().minusMonths(1), LocalDate.now());
+    }
+
+    @Override
+    public double getTotalSpendingPreviousMonth(int userId) {
+        return getTotalSpending(userId, LocalDate.now().minusMonths(2), LocalDate.now().minusMonths(1));
+    }
+
+    @Override
+    public double getTotalSpendingToday(int userId) {
+        return getTotalSpending(userId, LocalDate.now(), LocalDate.now());
+    }
+
+    @Override
+    public double getTotalSpendingLastWeek(int userId) {
+        return getTotalSpending(userId, LocalDate.now().minusWeeks(1), LocalDate.now());
+    }
+
+    @Override
+    public double getTotalSpendingLastYear(int userId) {
+        return getTotalSpending(userId, LocalDate.now().minusYears(1), LocalDate.now());
+    }
+
+    private double getTotalSpending(int userId, LocalDate startDate, LocalDate endDate) {
+        List<Transaction> transactions = transactionRepository.findTransactionsByUserIdAndDateRange(userId, startDate, endDate);
+
+        double totalSpending = 0.0;
+        for (Transaction transaction : transactions) {
+            totalSpending += transaction.getAmount();
+        }
+
+        return totalSpending;
+    }
+
 
 
 }

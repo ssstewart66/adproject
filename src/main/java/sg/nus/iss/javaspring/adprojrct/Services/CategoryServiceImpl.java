@@ -84,4 +84,13 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getCategoriesByType(int type){
         return categoryRepository.findByType(type);
     }
+
+
+    @Override
+    public double getTotalBudgetByUserId(int userId) {
+        List<Category> categories = categoryRepository.findByUserId(userId);
+        return categories.stream()
+                .mapToDouble(Category::getBudget)
+                .sum();
+    }
 }
