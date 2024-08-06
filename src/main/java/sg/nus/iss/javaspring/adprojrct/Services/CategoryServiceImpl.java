@@ -58,6 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
 //                    throw new IllegalArgumentException("Category with the same name already exists");
 //                }
 //            }
+            cat.setName(category.getName());
             cat.setBudget(category.getBudget());
             if (category.getType() == 0) {
                 cat.setType(0);
