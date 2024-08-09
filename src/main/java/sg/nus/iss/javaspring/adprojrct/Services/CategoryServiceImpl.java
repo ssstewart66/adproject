@@ -1,6 +1,7 @@
 package sg.nus.iss.javaspring.adprojrct.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sg.nus.iss.javaspring.adprojrct.Models.Category;
@@ -92,5 +93,10 @@ public class CategoryServiceImpl implements CategoryService {
         return categories.stream()
                 .mapToDouble(Category::getBudget)
                 .sum();
+    }
+
+    @Override
+    public List<Object[]> getTopCategoriesWithMostTransactions() {
+        return categoryRepository.findTopCategoriesWithMostTransactions(PageRequest.of(0, 5));
     }
 }

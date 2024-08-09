@@ -11,7 +11,7 @@ public interface TransactionService {
     Optional<List<Transaction>> getTransactionsByCategoryId(int categoryId);
     Optional<Transaction> getTransactionById(int transactionId);
     Optional<List<Transaction>> getTransactionsByUserId(int userId);
-
+    List<Object[]> getAverageAmountPerCategory();
     Transaction addTransaction(Transaction transaction, int userId);
     Transaction updateTransaction(Transaction transaction, int transactionId);
     void deleteTransaction(int transactionId);

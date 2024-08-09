@@ -128,6 +128,8 @@ public class TransactionServiceImpl implements TransactionService{
         return totalSpending;
     }
 
-
-
+    @Override
+    public List<Object[]> getAverageAmountPerCategory() {
+        return transactionRepository.findAverageAmountPerCategory();
+    }
 }

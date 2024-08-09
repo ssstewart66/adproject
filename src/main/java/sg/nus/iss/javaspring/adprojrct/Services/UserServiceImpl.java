@@ -2,7 +2,6 @@ package sg.nus.iss.javaspring.adprojrct.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sg.nus.iss.javaspring.adprojrct.Models.Category;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
 

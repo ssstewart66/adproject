@@ -157,5 +157,15 @@ public class AdminController {
     public void deleteUser(@PathVariable Integer userId) {
         userService.deleteUserById(userId);
     }
+
+    @GetMapping("/average-amount-per-category")
+    public List<Object[]> getAverageAmountPerCategory() {
+        return transactionService.getAverageAmountPerCategory();
+    }
+
+    @GetMapping("/top-categories")
+    public List<Object[]> getTopCategories() {
+        return categoryService.getTopCategoriesWithMostTransactions();
+    }
 }
 
