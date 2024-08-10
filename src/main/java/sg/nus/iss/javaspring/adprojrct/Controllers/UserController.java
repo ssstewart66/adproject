@@ -10,8 +10,11 @@ import sg.nus.iss.javaspring.adprojrct.Models.Transaction;
 import sg.nus.iss.javaspring.adprojrct.Services.CategoryService;
 import sg.nus.iss.javaspring.adprojrct.Services.TransactionService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -71,6 +74,8 @@ public class UserController {
         }
     }
 
+
+
     @GetMapping("/transaction/{userId}")
     public ResponseEntity<List<Transaction>> getTransactionsById(@PathVariable Integer userId) {
         return ResponseEntity.ok(transactionService.findTransactionsByOrderDateAtDesc(userId));
@@ -79,6 +84,7 @@ public class UserController {
     @PostMapping("/transaction/add/{userId}")
     public ResponseEntity<?> addTransaction(@RequestBody Transaction transaction, @PathVariable Integer userId) {
         try {
+            System.out.println(userId);
             Transaction newTransaction = transactionService.addTransaction(transaction, userId);
             return ResponseEntity.ok(newTransaction);
         } catch (IllegalArgumentException e) {
@@ -104,7 +110,9 @@ public class UserController {
     }
 
 
-   // DASHBOARD API   ( つ•̀ω•́)つ
+    // DASHBOARD API   ( つ•̀ω•́)つ
+
+
 
     @GetMapping("/total-spending-today/{userId}")
     public ResponseEntity<Double> getTotalSpendingToday(@PathVariable int userId) {
@@ -141,5 +149,30 @@ public class UserController {
     public ResponseEntity<Double> getTotalBudgetByUserId(@PathVariable int userId) {
         double totalBudget = categoryService.getTotalBudgetByUserId(userId);
         return ResponseEntity.ok(totalBudget);
+    }
+
+    @GetMapping("/total-spending-current-mouth/{userId}")
+    public ResponseEntity<Double> getTotalSpendingCurrentMouth(@PathVariable int userId) {
+        double totalSpending = transactionService.getTotalSpendingCurrentMonth(userId);
+        return ResponseEntity.ok(totalSpending);
+    }
+
+    @GetMapping("/total-spending-current-mouth-by-category/{userId}")
+    public ResponseEntity<List<Map<String, Object>>> getTotalSpendingCurrentByCategory(@PathVariable int userId) {
+        List<Map<String, Object>> totalSpending = transactionService.getTotalSpendingByCategoryForCurrentMonth(userId);
+        //System.out.println(totalSpending);
+        return ResponseEntity.ok(totalSpending);
+    }
+
+//    @GetMapping("/category-spending/{userId}")
+//    public ResponseEntity<List<Object[]>> getTotalSpendingByCategoryForCurrentMonth(@PathVariable int userId) {
+//        List<Object[]> categorySpendings = transactionService.getTotalSpendingByCategoryForCurrentMonth(userId);
+//        return ResponseEntity.ok(categorySpendings);
+//    }
+
+    @GetMapping("/total-spending-current/{userId}")
+    public ResponseEntity<Double> getTotalSpendingCurrent(@PathVariable int userId) {
+        double totalSpending = transactionService.getTotalSpendingCurrentMonth(userId);
+        return ResponseEntity.ok(totalSpending);
     }
 }
