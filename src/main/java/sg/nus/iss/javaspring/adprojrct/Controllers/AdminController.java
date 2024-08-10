@@ -1,6 +1,7 @@
 package sg.nus.iss.javaspring.adprojrct.Controllers;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,16 +66,27 @@ public class AdminController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Integer id, HttpSession session) {
-        // 验证会话是否存在
+    public ResponseEntity<String> deleteCategory(@PathVariable Integer id, HttpSession session) {
         if (session.getAttribute("user") == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Unauthorized access", HttpStatus.UNAUTHORIZED);
         }
 
-        categoryService.deleteCategory(id);
+        // 检查是否有相关联的 transactions
+        List<Transaction> transactions = transactionService.getTransactionsByCategoryId(id).get();
+        if (!transactions.isEmpty()) {
+            return new ResponseEntity<>("Cannot delete category: There are transactions associated with this category.", HttpStatus.CONFLICT);
+        }
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            categoryService.deleteCategory(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>("Cannot delete category due to data integrity violation", HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An unexpected error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
 
     @GetMapping("/category/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Integer id) {
@@ -153,10 +165,35 @@ public class AdminController {
         return ResponseEntity.ok(updatedUser);
     }
 
+/*
     @DeleteMapping("/deleteuser/{userId}")
     public void deleteUser(@PathVariable Integer userId) {
         userService.deleteUserById(userId);
     }
+*/
+
+    @DeleteMapping("/deleteuser/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Integer userId) {
+        Optional<User> optionalUser = userService.findUserById(userId);
+
+        if (optionalUser.isEmpty()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        User user = optionalUser.get();
+
+        if (user.getCategories() != null && !user.getCategories().isEmpty()) {
+            return new ResponseEntity<>("Cannot delete user: Categories associated with user", HttpStatus.CONFLICT);
+        }
+
+        if (user.getTransactions() != null && !user.getTransactions().isEmpty()) {
+            return new ResponseEntity<>("Cannot delete user: Transactions associated with user", HttpStatus.CONFLICT);
+        }
+
+        userService.deleteUserById(userId);
+        return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+    }
+
 
     @GetMapping("/average-amount-per-category")
     public List<Object[]> getAverageAmountPerCategory() {
