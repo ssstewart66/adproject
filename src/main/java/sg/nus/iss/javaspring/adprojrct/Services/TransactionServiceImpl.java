@@ -1,6 +1,18 @@
 package sg.nus.iss.javaspring.adprojrct.Services;
 
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import io.reactivex.Flowable;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,12 +23,10 @@ import sg.nus.iss.javaspring.adprojrct.Repositories.CategoryRepository;
 import sg.nus.iss.javaspring.adprojrct.Repositories.TransactionRepository;
 import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
