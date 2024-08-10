@@ -32,6 +32,6 @@ public interface TransactionService {
     List<Object[]> getTotalSpendingByCategoryForCurrent(int userId);
 
     List<Map<String, Object>> getTotalSpendingByCategoryForCurrentMonth(int userId);
-
+    List<Object[]> getAverageAmountPerCategory();
 
 }

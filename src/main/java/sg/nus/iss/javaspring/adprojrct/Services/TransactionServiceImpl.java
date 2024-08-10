@@ -171,6 +171,11 @@ public class TransactionServiceImpl implements TransactionService{
         return transactionRepository.findTotalSpendingByCategoryForCurrentMonth(userId, startOfMonth, endOfMonth);
     }
 
+    @Override
+    public List<Object[]> getAverageAmountPerCategory() {
+        return transactionRepository.findAverageAmountPerCategory();
+    }
+
 //    @Override
 //    public void deleteTransaction(Integer transactionId) {
 //        if (!transactionRepository.existsById(transactionId)) {

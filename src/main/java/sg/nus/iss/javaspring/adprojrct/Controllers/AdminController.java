@@ -176,11 +176,6 @@ public class AdminController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/deleteuser/{userId}")
-    public void deleteUser(@PathVariable Integer userId) {
-        userService.deleteUserById(userId);
-    }
-*/
 
     @DeleteMapping("/deleteuser/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer userId) {

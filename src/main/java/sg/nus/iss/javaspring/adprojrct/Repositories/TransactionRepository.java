@@ -22,4 +22,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     @Query("SELECT t.category.id, SUM(t.amount) FROM Transaction t WHERE t.user.id = :userId AND t.created_at BETWEEN :startDate AND :endDate GROUP BY t.category.id")
     List<Object[]> findTotalSpendingByCategoryForCurrentMonth(int userId, LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT t.category.name, AVG(t.amount) FROM Transaction t WHERE t.category.type = 0 GROUP BY t.category.name")
+    List<Object[]> findAverageAmountPerCategory();
 }
