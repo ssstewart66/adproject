@@ -137,6 +137,17 @@ public class AdminController {
         }
     }
 
+    @DeleteMapping("deleteTranscation/{transactionId}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Integer transactionId) {
+        transactionService.deleteTransaction(transactionId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("editTransaction/{transactionId}")
+    public ResponseEntity<Transaction> updateTransaction(@PathVariable Integer transactionId, @RequestBody Transaction transaction) {
+        Transaction updatedTransaction = transactionService.updateTransaction(transaction, transactionId);
+        return ResponseEntity.ok(updatedTransaction);
+    }
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
         List<User> users = userService.findAllUsers();
@@ -165,7 +176,6 @@ public class AdminController {
         return ResponseEntity.ok(updatedUser);
     }
 
-/*
     @DeleteMapping("/deleteuser/{userId}")
     public void deleteUser(@PathVariable Integer userId) {
         userService.deleteUserById(userId);
