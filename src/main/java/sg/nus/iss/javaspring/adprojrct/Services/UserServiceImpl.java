@@ -1,6 +1,7 @@
 package sg.nus.iss.javaspring.adprojrct.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
 import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
@@ -13,9 +14,23 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @Override
     public User saveUser(User user) {
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        copyDefaultCategoriesToNewUser(savedUser.getId());
+
+        return savedUser;
+    }
+
+    private void copyDefaultCategoriesToNewUser(int newUserId) {
+        String sql = "INSERT INTO adproject.categories (budget, name, type, user_id) " +
+                "SELECT budget, name, type, ? " +
+                "FROM adproject.categories WHERE type = 0";
+        jdbcTemplate.update(sql, newUserId);
     }
 
     @Override

@@ -26,6 +26,7 @@ import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -108,13 +109,13 @@ public class TransactionServiceImpl implements TransactionService{
 
 
     @Override
-    public double getTotalSpendingLastMonth(int userId) {
-        return getTotalSpending(userId, LocalDate.now().minusMonths(1), LocalDate.now());
+    public double getTotalSpendingThisMonth(int userId) {
+        return getTotalSpending(userId, YearMonth.now().atDay(1), LocalDate.now());
     }
 
     @Override
     public double getTotalSpendingPreviousMonth(int userId) {
-        return getTotalSpending(userId, LocalDate.now().minusMonths(2), LocalDate.now().minusMonths(1));
+        return getTotalSpending(userId, YearMonth.now().minusMonths(1).atDay(1), YearMonth.now().minusMonths(1).atEndOfMonth());
     }
 
     @Override

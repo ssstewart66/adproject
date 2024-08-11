@@ -19,7 +19,7 @@ public interface TransactionService {
     void deleteTransaction(int transactionId);
     List<Transaction> findTransactionsByOrderDateAtDesc(int userId);
 
-    double getTotalSpendingLastMonth(int userId);
+    double getTotalSpendingThisMonth(int userId);
     double getTotalSpendingPreviousMonth(int userId);
     double getTotalSpendingToday(int userId);
     double getTotalSpendingLastWeek(int userId);

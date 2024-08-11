@@ -13,6 +13,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Optional<Category> findByNameAndUserId(String name, Integer userId);
     List<Category> findByUserIdNot(int userId);
     List<Category> findByType(int type);
+
     @Query("SELECT c.name, COUNT(t) AS transactionCount FROM Category c " +
             "LEFT JOIN c.transactions t " +
             "GROUP BY c.id, c.name " +

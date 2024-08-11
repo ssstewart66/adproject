@@ -126,9 +126,9 @@ public class UserController {
         return ResponseEntity.ok(totalSpending);
     }
 
-    @GetMapping("/total-spending-last-month/{userId}")
+    @GetMapping("/total-spending-this-month/{userId}")
     public ResponseEntity<Double> getTotalSpendingLastMonth(@PathVariable int userId) {
-        double totalSpending = transactionService.getTotalSpendingLastMonth(userId);
+        double totalSpending = transactionService.getTotalSpendingThisMonth(userId);
         return ResponseEntity.ok(totalSpending);
     }
 

@@ -1,11 +1,11 @@
 package sg.nus.iss.javaspring.adprojrct.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sg.nus.iss.javaspring.adprojrct.Models.Category;
 import sg.nus.iss.javaspring.adprojrct.Models.User;
-import org.springframework.data.domain.PageRequest;
 import sg.nus.iss.javaspring.adprojrct.Repositories.CategoryRepository;
 import sg.nus.iss.javaspring.adprojrct.Repositories.UserRepository;
 
@@ -59,7 +59,6 @@ public class CategoryServiceImpl implements CategoryService {
 //                    throw new IllegalArgumentException("Category with the same name already exists");
 //                }
 //            }
-            cat.setName(category.getName());
             cat.setBudget(category.getBudget());
             if (category.getType() == 0) {
                 cat.setType(0);
@@ -86,6 +85,11 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByType(type);
     }
 
+    @Override
+    public List<Object[]> getTopCategoriesWithMostTransactions() {
+        return categoryRepository.findTopCategoriesWithMostTransactions(PageRequest.of(0, 5));
+    }
+
 
     @Override
     public double getTotalBudgetByUserId(int userId) {
@@ -93,10 +97,5 @@ public class CategoryServiceImpl implements CategoryService {
         return categories.stream()
                 .mapToDouble(Category::getBudget)
                 .sum();
-    }
-
-    @Override
-    public List<Object[]> getTopCategoriesWithMostTransactions() {
-        return categoryRepository.findTopCategoriesWithMostTransactions(PageRequest.of(0, 5));
     }
 }
