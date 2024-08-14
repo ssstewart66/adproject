@@ -11,6 +11,7 @@ public class Transaction {
     private Integer id;
     private double amount;
     private String description;
+
     private LocalDate created_at;
     private LocalDateTime updated_at;
 

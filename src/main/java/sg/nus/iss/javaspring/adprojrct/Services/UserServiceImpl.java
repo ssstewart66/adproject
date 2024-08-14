@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private void copyDefaultCategoriesToNewUser(int newUserId) {
         String sql = "INSERT INTO adproject.categories (budget, name, type, user_id) " +
                 "SELECT budget, name, type, ? " +
-                "FROM adproject.categories WHERE type = 0";
+                "FROM adproject.categories WHERE type = 0 and user_id = 1";
         jdbcTemplate.update(sql, newUserId);
     }
 

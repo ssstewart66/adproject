@@ -12,6 +12,7 @@ import sg.nus.iss.javaspring.adprojrct.Services.CategoryService;
 import sg.nus.iss.javaspring.adprojrct.Services.TransactionService;
 import sg.nus.iss.javaspring.adprojrct.Services.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,15 @@ public class AdminController {
     @GetMapping("/categories/{type}")  //0 -> System  1 -> User
     public ResponseEntity<List<Category>> getCategoriesByType(@PathVariable int type) {
         List<Category> categories = categoryService.getCategoriesByType(type);
+        if (categories.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/categories_user/{userId}")
+    public ResponseEntity<List<Category>> getCategoryByUserId(@PathVariable int userId) {
+        List<Category> categories = categoryService.getCategoriesByUserId(userId);
         if (categories.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

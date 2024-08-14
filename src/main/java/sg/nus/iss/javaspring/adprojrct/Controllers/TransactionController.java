@@ -139,8 +139,8 @@ public class TransactionController {
 
         System.out.println(tips);
 
-        String spendingOverview = extractSection(tips, "Spending Overview", "Budget Adjustment Suggestions");
-        String budgetAdjustment = extractSection(tips, "Budget Adjustment Suggestions", "Savings Tips");
+        String spendingOverview = extractSection(tips, "Spending Overview", "Budget Adjustment");
+        String budgetAdjustment = extractSection(tips, "Budget Adjustment", "Savings Tips");
         String savingsTips = extractSection(tips, "Savings Tips", null);
 
         result.add(createJsonEntry("Spending Overview", spendingOverview));
