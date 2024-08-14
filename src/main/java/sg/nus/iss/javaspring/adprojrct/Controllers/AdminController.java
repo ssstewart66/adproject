@@ -61,6 +61,7 @@ public class AdminController {
         if (optionalCategory.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        System.out.println(category.getType());
         Category updatedCategory = categoryService.updateCategory(category, catId);
         return ResponseEntity.ok(updatedCategory);
     }

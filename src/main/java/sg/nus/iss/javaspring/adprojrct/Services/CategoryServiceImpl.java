@@ -65,6 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
             } else if (category.getType() == 1) {
                 cat.setType(1);
             }
+            cat.setName(category.getName());
             return categoryRepository.save(cat);
         }).orElseThrow(() -> new RuntimeException("Category not found"));
     }
